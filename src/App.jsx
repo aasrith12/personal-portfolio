@@ -266,7 +266,14 @@ function TimelineItem({ title, subtitle, period, points, index, datePosition }) 
 }
 
 export default function App() {
-  const isAboutPage = typeof window !== "undefined" && window.location.pathname.replace(/\/$/, "") === "/about";
+  const basePath = import.meta.env.BASE_URL.replace(/\/+$/, "");
+  const withBase = (path) => `${import.meta.env.BASE_URL}${String(path).replace(/^\/+/, "")}`;
+  const homeHref = import.meta.env.BASE_URL;
+  const aboutHref = withBase("about");
+  const resumeHref = withBase("resume.pdf");
+  const aboutPath = `${basePath}/about`;
+  const currentPath = typeof window !== "undefined" ? window.location.pathname.replace(/\/+$/, "") : "";
+  const isAboutPage = currentPath === aboutPath;
   const [activeSlide, setActiveSlide] = useState(0);
   const currentYear = new Date().getFullYear();
 
@@ -346,10 +353,10 @@ export default function App() {
               I design and ship AI-enabled web products with clean UX, practical architecture, and measurable outcomes.
             </p>
             <div className="cta-row">
-              <a className="btn btn-primary" href="/about">
+              <a className="btn btn-primary" href={aboutHref}>
                 More About Me
               </a>
-              <a className="btn btn-ghost" href="/resume.pdf" target="_blank" rel="noreferrer">
+              <a className="btn btn-ghost" href={resumeHref} target="_blank" rel="noreferrer">
                 Resume
               </a>
             </div>
@@ -386,7 +393,7 @@ export default function App() {
 
           <div className="hero-side">
             <article className="profile-card" aria-label="Profile card">
-              <img className="profile-image" src="/hero-image.jpeg" alt="Aasrith Satya Matta portrait" />
+              <img className="profile-image" src={withBase("hero-image.jpeg")} alt="Aasrith Satya Matta portrait" />
               <h3 className="profile-name">Aasrith Satya Matta</h3>
               <p className="profile-text">
                 Software Engineer focused on practical AI products, robust backend systems, and clean frontend design.
@@ -459,7 +466,7 @@ export default function App() {
             {education.map((item) => (
               <article key={item.school} className="card">
                 <div className="edu-head">
-                  <img className="edu-logo" src={item.logo} alt={`${item.school} logo`} />
+                  <img className="edu-logo" src={withBase(item.logo)} alt={`${item.school} logo`} />
                   <h3>{item.school}</h3>
                 </div>
                 <p className="meta">{item.degree}</p>
@@ -568,7 +575,7 @@ export default function App() {
 
                   return (
                     <article key={slide.src} className={classes}>
-                      <img src={slide.src} alt={slide.title} />
+                      <img src={withBase(slide.src)} alt={slide.title} />
                       <p>{slide.title}</p>
                     </article>
                   );
@@ -703,7 +710,7 @@ export default function App() {
       )}
 
       <div className="footer-top-action">
-        <a className="footer-home-btn" href="/">
+        <a className="footer-home-btn" href={homeHref}>
           Back to Home
         </a>
       </div>
